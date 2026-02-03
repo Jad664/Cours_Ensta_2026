@@ -1,0 +1,27 @@
+Dans ce problème, on suppose qu’Alice a réussi à rendre parallèle la majeure partie de son programme. En effet, 90 % du temps d’exécution du code séquentiel correspond à des calculs qui peuvent être répartis sur plusieurs nœuds, tandis que les 10 % restants doivent obligatoirement être exécutés de manière séquentielle.
+
+La loi d’Amdahl permet de relier le nombre de nœuds de calcul n à l’accélération obtenue. Elle s’écrit sous la forme :
+
+S(n) = 1 / (0.1 + 0.9 / n)
+
+Lorsque le nombre de nœuds augmente fortement, la contribution du terme 0.9 / n devient très faible. Dans ce cas, l’accélération dépend presque uniquement de la partie séquentielle du programme. On en déduit que l’accélération maximale atteignable est :
+
+S_max = 10
+
+Cela signifie que, quelle que soit la puissance de calcul disponible, la présence d’une partie séquentielle empêche le programme d’être accéléré au-delà de ce facteur.
+
+Afin de choisir un nombre de nœuds pertinent, on peut examiner l’évolution du speedup pour différentes valeurs. Par exemple, avec 4 nœuds, l’accélération est d’environ 3.1. En passant à 8 nœuds, elle atteint environ 4.7, puis environ 6.4 pour 16 nœuds. On constate que l’augmentation du nombre de nœuds améliore bien les performances, mais avec des gains de plus en plus limités.
+
+Il n’est donc pas nécessaire d’utiliser un très grand nombre de nœuds pour ce jeu de données. Un choix compris entre 8 et 16 nœuds apparaît comme un bon compromis entre performance et utilisation efficace des ressources CPU.
+
+Lors des mesures réalisées sur le calculateur, Alice observe cependant une accélération maximale de 4. Cette valeur plus faible que celle prédite théoriquement s’explique par des effets non pris en compte par le modèle idéal, comme les coûts de communication, les synchronisations entre processus, le déséquilibre de charge ou encore l’overhead lié à l’environnement d’exécution.
+
+Si l’on double maintenant la quantité de données à traiter et que l’on suppose que le coût de la partie parallèle évolue de façon linéaire, la loi de Gustafson devient plus adaptée pour estimer les performances. Dans cette situation, le temps séquentiel reste inchangé (0.1), alors que le temps parallèle double et passe à 1.8. Le temps total d’exécution est donc de 1.9.
+
+La part relative du temps séquentiel diminue alors fortement et vaut environ 0.053. La loi de Gustafson permet alors d’exprimer l’accélération sous la forme :
+
+S_G(n) = n − alpha × (n − 1)
+
+Pour n = 4, on obtient une accélération proche de 3.84.
+
+On en conclut qu’en augmentant la taille du problème, le parallélisme devient plus efficace : la partie séquentielle a moins d’impact et le programme peut tirer un meilleur parti du nombre de nœuds disponibles.
